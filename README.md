@@ -1,10 +1,6 @@
 # pelado-banco
 ## Projeto 1 da disciplina DIM0501 - Boas práticas de porgramação
 
-**Projeto da Disciplina de Boas Práticas de Programação**
-
----
-
 ## 1. Sobre o Projeto
 
 Este projeto consiste em um Sistema Bancário, desenvolvido em Java, com o objetivo de aplicar e demonstrar as boas práticas de programação aprendidas em sala de aula.
