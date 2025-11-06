@@ -38,7 +38,7 @@ public class Banco {
             System.out.println("Conta corrente criada com sucesso: " + conta);
             return conta;
         } else if (tipoConta.equalsIgnoreCase("poupanca")) {
-            Conta conta = new ContaPoupanca(numeroConta, titular, saldoInicial, 0.5);
+            Conta conta = new ContaPoupanca(numeroConta, titular, saldoInicial, 6.167);
             contas.add(conta);
             System.out.println("Conta poupança criada com sucesso: " + conta);
             return conta;
@@ -80,4 +80,5 @@ public class Banco {
             System.out.println(conta);
         }
     }
+
 }
