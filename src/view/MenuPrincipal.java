@@ -1,11 +1,11 @@
-package src.view;
+package view;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import src.model.Conta;
-import src.service.Banco;
+import model.Conta;
+import service.Banco;
 
 public class MenuPrincipal {
 
@@ -55,6 +55,9 @@ public class MenuPrincipal {
                     consultarSaldo();
                     break;
                 case "10":
+                    aplicarRendimentosPoupanca();
+                    break;
+                case "11":
                     exibirEstatisticasBanco();
                     break;            
                 case "0":
@@ -81,7 +84,8 @@ public class MenuPrincipal {
         System.out.println("7 - Sacar");
         System.out.println("8 - Transferir");
         System.out.println("9 - Consultar saldo");
-        System.out.println("10 - Exibir estatísticas do banco");
+        System.out.println("10 - Aplicar rendimentos em contas poupança");
+        System.out.println("11 - Exibir estatísticas do banco");
         System.out.println("0 - Sair");
         System.out.print("Escolha uma opção: ");
     }
@@ -248,5 +252,10 @@ public class MenuPrincipal {
                 System.out.println(c);
             }
         }
+    }
+
+    private void aplicarRendimentosPoupanca() {
+        System.out.println("Aplicar rendimentos em contas poupança");
+        banco.aplicarRendimentosPoupanca();
     }
 }

@@ -1,4 +1,4 @@
-package src.model;
+package model;
 public class ContaPoupanca extends Conta {
 
     private double taxaJuros;
@@ -11,6 +11,10 @@ public class ContaPoupanca extends Conta {
     public void aplicarJuros() {
         double juros = saldo * taxaJuros / 100;
         depositar(juros);
+    }
+
+    public double getTaxaJuros() {
+        return taxaJuros;
     }
 
     @Override

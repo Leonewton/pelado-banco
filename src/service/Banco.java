@@ -1,13 +1,13 @@
-package src.service;
+package service;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.model.Cliente;
-import src.model.Conta;
-import src.model.ContaCorrente;
-import src.model.ContaPoupanca;
+import model.Cliente;
+import model.Conta;
+import model.ContaCorrente;
+import model.ContaPoupanca;
 
 public class Banco {
     private List<Cliente> clientes;
@@ -135,17 +135,30 @@ public class Banco {
     }
 
     public void exibirEstatisticasBanco() {
-        int totalContas = contas.size();
-        double saldoTotal = 0;
-        
+        int totalContasCorrentes = 0;
+        int totalContasPoupanca = 0;
+        double saldoTotalCorrente = 0.0;
+        double saldoTotalPoupanca = 0.0;
+
         for (Conta conta : contas) {
-            saldoTotal += conta.getSaldo();
+            if (conta instanceof ContaCorrente) {
+                totalContasCorrentes++;
+                saldoTotalCorrente += conta.getSaldo();
+            } else if (conta instanceof ContaPoupanca) {
+                totalContasPoupanca++;
+                saldoTotalPoupanca += conta.getSaldo();
+            }
         }
-        
-        System.out.println("\n=== Estatísticas do Banco ===");
-        System.out.println("Total de contas cadastradas: " + totalContas);
-        System.out.println("Saldo total no banco: R$" + saldoTotal);
-        System.out.println("============================\n");
+
+        int totalContas = totalContasCorrentes + totalContasPoupanca;
+        double saldoTotalBanco = saldoTotalCorrente + saldoTotalPoupanca;
+        System.out.println("Estatísticas do Banco:");
+        System.out.println("Total de Contas Correntes: " + totalContasCorrentes);
+        System.out.printf("Saldo Total em Contas Correntes: R$ %.2f\n", saldoTotalCorrente);
+        System.out.println("Total de Contas Poupança: " + totalContasPoupanca);
+        System.out.printf("Saldo Total em Contas Poupança: R$ %.2f\n", saldoTotalPoupanca);
+        System.out.println("Total de Contas: " + totalContas); 
+        System.out.printf("Saldo Total no Banco: R$ %.2f\n", saldoTotalBanco);
     }
 
     public void fazerTransferencia(String numeroContaOrigem, String numeroContaDestino, double valor) {
@@ -165,10 +178,26 @@ public class Banco {
         if (sucessoSaque) {
             contaDestino.depositar(valor);
             System.out.println("Transferência de R$" + valor + " realizada de " + numeroContaOrigem + " para " + numeroContaDestino);
-            System.out.println("Novo saldo da conta " + numeroContaOrigem + ": R$" + contaOrigem.getSaldo());
-            System.out.println("Novo saldo da conta " + numeroContaDestino + ": R$" + contaDestino.getSaldo());
+            System.out.printf("Novo saldo da conta %.2f " + numeroContaOrigem + ": R$" + contaOrigem.getSaldo());
+            System.out.printf("Novo saldo da conta %.2f" + numeroContaDestino + ": R$" + contaDestino.getSaldo());
         } else {
             System.out.println("Erro: Saldo insuficiente para transferência na conta " + numeroContaOrigem);
+        }
+    }
+
+    public void aplicarRendimentosPoupanca() {
+        int aplicada = 0;
+        for (Conta conta : contas) {
+            if (conta instanceof ContaPoupanca) {
+                ContaPoupanca contaPoupanca = (ContaPoupanca) conta;
+                System.out.println("Aplicando rendimento de " + contaPoupanca.getTaxaJuros() + "% na conta " + contaPoupanca.getNumero());
+                contaPoupanca.aplicarJuros();
+                System.out.printf("Rendimento aplicado na conta %s. Novo saldo: R$ %.2f\n",contaPoupanca.getNumero(), contaPoupanca.getSaldo());
+                aplicada++;
+    }
+        }
+        if (aplicada == 0) {
+            System.out.println("Nenhuma conta poupança encontrada para aplicar rendimentos.");
         }
     }
 }
