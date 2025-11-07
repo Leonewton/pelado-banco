@@ -1,3 +1,5 @@
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,4 +83,72 @@ public class Banco {
         }
     }
 
+    public void listarContasOrdenadasPorSaldo() {
+        System.out.println("Lista de Contas Ordenadas por Saldo:");
+        List<Conta> contasOrdenadas = new ArrayList<>(contas);
+        Collections.sort(contasOrdenadas, Comparator.comparingDouble(Conta::getSaldo).reversed());
+        for (Conta conta : contasOrdenadas) {
+            System.out.println(conta);
+        }
+    }
+
+    public void fazerDeposito(String numeroConta, double valor) {
+        Conta conta = buscarContaPorNumero(numeroConta);
+        if (conta != null) {
+            conta.depositar(valor);
+            System.out.println("Depósito de R$" + valor + " realizado na conta " + numeroConta);
+            System.out.println("Novo saldo: R$" + conta.getSaldo());
+        } else {
+            System.out.println("Erro: Conta " + numeroConta + " não encontrada.");
+        }
+
+    }
+
+    public void fazerSaque(String numeroConta, double valor) {
+        Conta conta = buscarContaPorNumero(numeroConta);
+        if (conta != null) {
+            boolean sucesso = conta.sacar(valor);
+            if (sucesso) {
+                System.out.println("Saque de R$" + valor + " realizado na conta " + numeroConta);
+                System.out.println("Novo saldo: R$" + conta.getSaldo());
+            } else {
+                System.out.println("Erro: Saldo insuficiente para saque na conta " + numeroConta);
+            }
+        } else {
+            System.out.println("Erro: Conta " + numeroConta + " não encontrada.");
+        }
+    }
+
+    public void consultarSaldo(String numeroConta) {
+        Conta conta = buscarContaPorNumero(numeroConta);
+        if (conta != null) {
+            System.out.println("Saldo da conta " + numeroConta + ": R$" + conta.getSaldo());
+        } else {
+            System.out.println("Erro: Conta " + numeroConta + " não encontrada.");
+        }
+    }
+
+    public void fazerTransferencia(String numeroContaOrigem, String numeroContaDestino, double valor) {
+        Conta contaOrigem = buscarContaPorNumero(numeroContaOrigem);
+        Conta contaDestino = buscarContaPorNumero(numeroContaDestino);
+
+        if (contaOrigem == null) {
+            System.out.println("Erro: Conta de origem " + numeroContaOrigem + " não encontrada.");
+            return;
+        }
+        if (contaDestino == null) {
+            System.out.println("Erro: Conta de destino " + numeroContaDestino + " não encontrada.");
+            return;
+        }
+
+        boolean sucessoSaque = contaOrigem.sacar(valor);
+        if (sucessoSaque) {
+            contaDestino.depositar(valor);
+            System.out.println("Transferência de R$" + valor + " realizada de " + numeroContaOrigem + " para " + numeroContaDestino);
+            System.out.println("Novo saldo da conta " + numeroContaOrigem + ": R$" + contaOrigem.getSaldo());
+            System.out.println("Novo saldo da conta " + numeroContaDestino + ": R$" + contaDestino.getSaldo());
+        } else {
+            System.out.println("Erro: Saldo insuficiente para transferência na conta " + numeroContaOrigem);
+        }
+    }
 }
