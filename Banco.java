@@ -128,6 +128,20 @@ public class Banco {
         }
     }
 
+    public void exibirEstatisticasBanco() {
+        int totalContas = contas.size();
+        double saldoTotal = 0;
+        
+        for (Conta conta : contas) {
+            saldoTotal += conta.getSaldo();
+        }
+        
+        System.out.println("\n=== Estatísticas do Banco ===");
+        System.out.println("Total de contas cadastradas: " + totalContas);
+        System.out.println("Saldo total no banco: R$" + saldoTotal);
+        System.out.println("============================\n");
+    }
+
     public void fazerTransferencia(String numeroContaOrigem, String numeroContaDestino, double valor) {
         Conta contaOrigem = buscarContaPorNumero(numeroContaOrigem);
         Conta contaDestino = buscarContaPorNumero(numeroContaDestino);

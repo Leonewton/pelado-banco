@@ -49,6 +49,9 @@ public class MenuPrincipal {
                     break;
                 case "9":
                     consultarSaldo();
+                    break;
+                case "10":
+                    exibirEstatisticasBanco();
                     break;            
                 case "0":
                     executando = false;
@@ -74,6 +77,7 @@ public class MenuPrincipal {
         System.out.println("7 - Sacar");
         System.out.println("8 - Transferir");
         System.out.println("9 - Consultar saldo");
+        System.out.println("10 - Exibir estatísticas do banco");
         System.out.println("0 - Sair");
         System.out.print("Escolha uma opção: ");
     }
@@ -224,6 +228,10 @@ public class MenuPrincipal {
         System.out.print("Número da conta: ");
         String numeroConta = scanner.nextLine().trim();
         banco.consultarSaldo(numeroConta);
+    }
+
+    private void exibirEstatisticasBanco() {
+        banco.exibirEstatisticasBanco();
     }
 
     private void resumoFinal() {
