@@ -1,4 +1,4 @@
-package src.model;
+package model;
 public class ContaCorrente extends Conta {
 
     public ContaCorrente(String numero, Cliente titular, double saldoInicial) {
