@@ -84,8 +84,92 @@ Estas são as instruções para compilação e execução do projeto via termina
     
 3.  **Executar o sistema:**
 
+## Diagrama de classes
 
----
+```mermaid
+classDiagram
+    class Main {
+        +main(String[] args)
+    }
+
+    class MenuPrincipal {
+        -Banco banco
+        -Scanner scanner
+        -List<Conta> contasCriadasPeloUsuario
+        +executar()
+        -mostrarMenu()
+        -cadastrarCliente()
+        -criarConta()
+        -listarContasSessao()
+        -listarClientes()
+        -listarContas()
+        -fazerDeposito()
+        -fazerSaque()
+        -fazerTransferencia()
+        -consultarSaldo()
+        -exibirEstatisticasBanco()
+        -resumoFinal()
+    }
+
+    class Banco {
+        -List<Cliente> clientes
+        -List<Conta> contas
+        -int proximoNumeroConta
+        +cadastrarCliente(nome: String, cpf: String, endereco: String): Cliente
+        +criarConta(cpfCliente: String, tipoConta: String, saldoInicial: double): Conta
+        -buscarClientePorCpf(cpf: String): Cliente
+        +buscarContaPorNumero(numeroConta: String): Conta
+        +listarClientes()
+        +listarContas()
+        +listarContasOrdenadasPorSaldo()
+        +fazerDeposito(numeroConta: String, valor: double)
+        +fazerSaque(numeroConta: String, valor: double)
+        +consultarSaldo(numeroConta: String)
+        +exibirEstatisticasBanco()
+        +fazerTransferencia(numeroContaOrigem: String, numeroContaDestino: String, valor: double)
+    }
+
+    class Cliente {
+        -String nome
+        -String cpf
+        -String endereco
+        +getNome(): String
+        +getCpf(): String
+        +getEndereco(): String
+        +toString(): String
+    }
+
+    class Conta {
+        <<abstrata>>
+        -String numero
+        -Cliente titular
+        #double saldo
+        +getNumero(): String
+        +getSaldo(): double
+        +getTitular(): Cliente
+        +depositar(valor: double)
+        +sacar(valor: double): boolean
+        +toString(): String
+    }
+
+    class ContaCorrente {
+        +toString(): String
+    }
+
+    class ContaPoupanca {
+        -double taxaJuros
+        +aplicarJuros()
+        +toString(): String
+    }
+
+    Main --> MenuPrincipal : Cria
+    MenuPrincipal --> Banco : Tem
+    Banco --> Cliente : Controla
+    Banco --> Conta : Controla
+    Conta --> Cliente : Tem
+    ContaCorrente --|> Conta : Extende
+    ContaPoupanca --|> Conta : Extende
+```
 
 ## 6. Equipe (Autores)
 
