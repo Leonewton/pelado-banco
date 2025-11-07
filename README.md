@@ -1,5 +1,4 @@
-# pelado-banco
-## Projeto 1 da disciplina DIM0501 - Boas práticas de porgramação
+# Projeto 1 da disciplina DIM0501 - Boas práticas de porgramação
 
 ## 1. Sobre o Projeto
 
@@ -30,7 +29,6 @@ O sistema implementa as seguintes funcionalidades obrigatórias:
 * **Consultas e Relatórios:**
     * Consulta de saldo individual.
     * Listagem de todas as contas em ordem descendente de saldo.
-    * Relatório de consolidação (total de contas e saldos por tipo e total geral do banco).
 
 ---
 
@@ -51,7 +49,6 @@ Este projeto foi estruturado com foco nos seguintes conceitos de boas práticas:
 
 * **Tratamento de Exceções:**
     * (Se aplicável) Descreva como o sistema lida com situações de erro, como saques com saldo insuficiente ou cadastro de CPFs duplicados.
-
 
 ---
 
@@ -74,17 +71,19 @@ Estas são as instruções para compilação e execução do projeto via termina
 
 ### Passos
 
-1.  **Clonar o repositório:**
+### 5.1.  **Clonar o repositório:**
     ```bash
     git clone [URL_DO_SEU_REPOSITORIO_AQUI]
     cd [NOME_DA_PASTA_DO_PROJETO]
     ```
 
-2.  **Compilar o sistema:**
-    
-3.  **Executar o sistema:**
+### 5.2.  **Compilar o sistema:**
+    DO TO
+### 5.3.  **Executar o sistema:**
+    DO TO
+---
 
-## Diagrama de classes
+## 6. Diagrama de classes
 
 ```mermaid
 classDiagram
@@ -171,14 +170,12 @@ classDiagram
     ContaPoupanca --|> Conta : Extende
 ```
 
-## 6. Equipe (Autores)
+---
+
+## 7. Equipe (Autores)
 
 Este projeto foi desenvolvido pelos seguintes integrantes:
 
 * **JONATHAS LEONILTON DE LIMA SOUZA** - (Leonewton)
 * **MARCELO DOS SANTOS VIEIRA** - (marcelo0404)
 * **JOÃO MARCOS SILVA FERNANDES DE FREITAS** - (jomasii) 
-
-## Compilação
-javac -d bin src/model/*.java src/service/*.java src/view/*.java src/Main.java
-java -cp bin Main
