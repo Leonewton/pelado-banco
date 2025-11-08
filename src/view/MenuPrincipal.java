@@ -1,11 +1,15 @@
 package view;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import model.Cliente;
 import model.Conta;
+import model.ContaPoupanca;
 import service.Banco;
+import service.EstatisticasBanco;
 
 public class MenuPrincipal {
 
@@ -92,13 +96,44 @@ public class MenuPrincipal {
 
     private void cadastrarCliente() {
         System.out.println("== Cadastrar cliente ==");
-        System.out.print("Nome: ");
-        String nome = scanner.nextLine().trim();
-        System.out.print("CPF (somente números): ");
-        String cpf = scanner.nextLine().trim();
-        System.out.print("Endereço: ");
-        String endereco = scanner.nextLine().trim();
-        banco.cadastrarCliente(nome, cpf, endereco);
+        String nome;
+        do {
+            System.out.print("Nome: ");
+            nome = scanner.nextLine().trim();
+            if (nome.isEmpty()) {
+                System.out.println("Nome não pode ficar vazio. Tente novamente.");
+            }
+        } while (nome.isEmpty());
+
+        String cpf;
+        do {
+            System.out.print("CPF (somente números): ");
+            cpf = scanner.nextLine().trim();
+            if (cpf.isEmpty()) {
+                System.out.println("CPF não pode ficar vazio. Tente novamente.");
+                continue;
+            }
+            if (!cpf.matches("\\d+")) {
+                System.out.println("CPF inválido. Use apenas números. Tente novamente.");
+                cpf = "";
+            }
+        } while (cpf.isEmpty());
+
+        String endereco;
+        do {
+            System.out.print("Endereço: ");
+            endereco = scanner.nextLine().trim();
+            if (endereco.isEmpty()) {
+                System.out.println("Endereço não pode ficar vazio. Tente novamente.");
+            }
+        } while (endereco.isEmpty());
+
+        Cliente novo = banco.cadastrarCliente(nome, cpf, endereco);
+        if (novo == null) {
+            System.out.println("Erro: Cliente com CPF " + cpf + " já cadastrado.");
+        } else {
+            System.out.println("Cliente cadastrado com sucesso: " + novo);
+        }
     }
 
     private void criarConta() {
@@ -124,6 +159,12 @@ public class MenuPrincipal {
         if (conta != null) {
             contasCriadasPeloUsuario.add(conta);
             System.out.println("Conta criada e adicionada à sua lista de criação: " + conta);
+        } else {
+            if (!banco.clienteExiste(cpf)) {
+                System.out.println("Erro: Cliente com CPF " + cpf + " não encontrado.");
+            } else {
+                System.out.println("Erro: Tipo de conta inválido. Use 'corrente' ou 'poupanca'.");
+            }
         }
     }
 
@@ -139,11 +180,27 @@ public class MenuPrincipal {
     }
 
     private void listarClientes() {
-        banco.listarClientes();
+        List<Cliente> clientes = banco.listarClientesData();
+        System.out.println("Lista de Clientes:");
+        if (clientes.isEmpty()) {
+            System.out.println("Nenhum cliente cadastrado.");
+        } else {
+            for (Cliente c : clientes) {
+                System.out.println(c);
+            }
+        }
     }
 
     private void listarContas() {
-        banco.listarContas();
+        List<Conta> contas = banco.listarContasData();
+        System.out.println("Lista de Contas:");
+        if (contas.isEmpty()) {
+            System.out.println("Nenhuma conta cadastrada.");
+        } else {
+            for (Conta c : contas) {
+                System.out.println(c);
+            }
+        }
     }
 
     private void fazerDeposito() {
@@ -167,7 +224,13 @@ public class MenuPrincipal {
             }
         }
 
-        conta.depositar(valor);
+        boolean sucesso = banco.fazerDepositoData(numeroConta, valor);
+        if (sucesso) {
+            System.out.println("Depósito de R$" + valor + " realizado na conta " + numeroConta);
+            System.out.println("Novo saldo: R$" + banco.consultarSaldoData(numeroConta));
+        } else {
+            System.out.println("Erro ao realizar depósito.");
+        }
     }
 
     private void fazerSaque() {
@@ -191,11 +254,12 @@ public class MenuPrincipal {
             }
         }
 
-        boolean sucesso = conta.sacar(valor);
+        boolean sucesso = banco.fazerSaqueData(numeroConta, valor);
         if (sucesso) {
             System.out.println("Saque realizado com sucesso.");
+            System.out.println("Novo saldo: R$" + banco.consultarSaldoData(numeroConta));
         } else {
-            System.out.println("Saldo insuficiente para o saque."); 
+            System.out.println("Saldo insuficiente para o saque ou conta não encontrada.");
         }
     }
 
@@ -228,18 +292,37 @@ public class MenuPrincipal {
             }
         }
 
-        banco.fazerTransferencia(numeroContaOrigem, numeroContaDestino, valor);
+        boolean sucesso = banco.fazerTransferenciaData(numeroContaOrigem, numeroContaDestino, valor);
+        if (sucesso) {
+            System.out.println("Transferência de R$" + valor + " realizada de " + numeroContaOrigem + " para " + numeroContaDestino);
+            System.out.println("Novo saldo da conta " + numeroContaOrigem + ": R$" + banco.consultarSaldoData(numeroContaOrigem));
+            System.out.println("Novo saldo da conta " + numeroContaDestino + ": R$" + banco.consultarSaldoData(numeroContaDestino));
+        } else {
+            System.out.println("Erro: transferência falhou (conta não encontrada ou saldo insuficiente).");
+        }
     }
 
     private void consultarSaldo() {
         System.out.println("== Consultar saldo ==");
         System.out.print("Número da conta: ");
         String numeroConta = scanner.nextLine().trim();
-        banco.consultarSaldo(numeroConta);
+        Double saldo = banco.consultarSaldoData(numeroConta);
+        if (saldo == null) {
+            System.out.println("Erro: Conta " + numeroConta + " não encontrada.");
+        } else {
+            System.out.println("Saldo da conta " + numeroConta + ": R$" + saldo);
+        }
     }
 
     private void exibirEstatisticasBanco() {
-        banco.exibirEstatisticasBanco();
+        EstatisticasBanco stats = banco.exibirEstatisticasBancoData();
+        System.out.println("Estatísticas do Banco:");
+        System.out.println("Total de Contas Correntes: " + stats.getTotalContasCorrentes());
+        System.out.printf("Saldo Total em Contas Correntes: R$ %.2f\n", stats.getSaldoTotalCorrente());
+        System.out.println("Total de Contas Poupança: " + stats.getTotalContasPoupanca());
+        System.out.printf("Saldo Total em Contas Poupança: R$ %.2f\n", stats.getSaldoTotalPoupanca());
+        System.out.println("Total de Contas: " + stats.getTotalContas());
+        System.out.printf("Saldo Total no Banco: R$ %.2f\n", stats.getSaldoTotalBanco());
     }
 
     private void resumoFinal() {
@@ -256,6 +339,13 @@ public class MenuPrincipal {
 
     private void aplicarRendimentosPoupanca() {
         System.out.println("Aplicar rendimentos em contas poupança");
-        banco.aplicarRendimentosPoupanca();
+        List<ContaPoupanca> aplicadas = banco.aplicarRendimentosPoupancaData();
+        if (aplicadas.isEmpty()) {
+            System.out.println("Nenhuma conta poupança encontrada para aplicar rendimentos.");
+        } else {
+            for (ContaPoupanca cp : aplicadas) {
+                System.out.printf("Rendimento aplicado na conta %s. Novo saldo: R$ %.2f\n", cp.getNumero(), cp.getSaldo());
+            }
+        }
     }
 }
