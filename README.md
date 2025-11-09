@@ -73,14 +73,14 @@ Estas são as instruções para compilação e execução do projeto via termina
 
 ### 5.1.  **Clonar o repositório:**
     ```bash
-    git clone [URL_DO_SEU_REPOSITORIO_AQUI]
-    cd [NOME_DA_PASTA_DO_PROJETO]
+    git clone https://github.com/Leonewton/pelado-banco/
+    cd pelado-banco
     ```
 
 ### 5.2.  **Compilar o sistema:**
-    DO TO
+DO TO
 ### 5.3.  **Executar o sistema:**
-    DO TO
+DO TO
 ---
 
 ## 6. Diagrama de classes
@@ -118,14 +118,15 @@ classDiagram
         +criarConta(cpfCliente: String, tipoConta: String, saldoInicial: double): Conta
         -buscarClientePorCpf(cpf: String): Cliente
         +buscarContaPorNumero(numeroConta: String): Conta
-        +listarClientes()
-        +listarContas()
-        +listarContasOrdenadasPorSaldo()
-        +fazerDeposito(numeroConta: String, valor: double)
-        +fazerSaque(numeroConta: String, valor: double)
-        +consultarSaldo(numeroConta: String)
-        +exibirEstatisticasBanco()
-        +fazerTransferencia(numeroContaOrigem: String, numeroContaDestino: String, valor: double)
+        +listarClientesData(): List<Cliente>
+        +listarContasData(): List<Conta>
+        +listarContasOrdenadasPorSaldoData(): List<Conta>
+        +fazerDepositoData(numeroConta: String, valor: double): boolean
+        +fazerSaqueData(numeroConta: String, valor: double): boolean
+        +consultarSaldoData(numeroConta: String): Double
+        +exibirEstatisticasBancoData(): EstatisticasBanco
+        +fazerTransferenciaData(numeroContaOrigem: String, numeroContaDestino: String, valor: double): boolean
+        +aplicarRendimentosPoupancaData(): List<ContaPoupanca>
     }
 
     class Cliente {
@@ -158,6 +159,7 @@ classDiagram
     class ContaPoupanca {
         -double taxaJuros
         +aplicarJuros()
+        +getTaxaJuros(): double
         +toString(): String
     }
 
@@ -165,9 +167,25 @@ classDiagram
     MenuPrincipal --> Banco : Tem
     Banco --> Cliente : Controla
     Banco --> Conta : Controla
+    Banco --> EstatisticasBanco : Retorna
     Conta --> Cliente : Tem
     ContaCorrente --|> Conta : Extende
     ContaPoupanca --|> Conta : Extende
+
+    class EstatisticasBanco {
+        -int totalContasCorrentes
+        -double saldoTotalCorrente
+        -int totalContasPoupanca
+        -double saldoTotalPoupanca
+        -int totalContas
+        -double saldoTotalBanco
+        +getTotalContasCorrentes(): int
+        +getSaldoTotalCorrente(): double
+        +getTotalContasPoupanca(): int
+        +getSaldoTotalPoupanca(): double
+        +getTotalContas(): int
+        +getSaldoTotalBanco(): double
+    }
 ```
 
 ---

@@ -20,11 +20,11 @@ public class Banco {
         this.proximoNumeroConta = 1;
     }
 
-    public Cliente cadastrarCliente(String nome, String cpf, String endereco) {
-        if (buscarClientePorCpf(cpf) != null) {
+    public Cliente cadastrarCliente(String nomeCliente, String cpfCliente, String enderecoCliente) {
+        if (buscarClientePorCpf(cpfCliente) != null) {
             return null;
         }
-        Cliente novoCliente = new Cliente(nome, cpf, endereco);
+        Cliente novoCliente = new Cliente(nomeCliente, cpfCliente, enderecoCliente);
         this.clientes.add(novoCliente);
         return novoCliente;
     }
@@ -51,17 +51,17 @@ public class Banco {
         
     }
 
-    private Cliente buscarClientePorCpf(String cpf) {
+    private Cliente buscarClientePorCpf(String cpfCliente) {
         for (Cliente cliente : clientes) {
-            if (cliente.getCpf().equals(cpf)) {
+            if (cliente.getCpf().equals(cpfCliente)) {
                 return cliente;
             }
         }
         return null;
     }
 
-    public boolean clienteExiste(String cpf) {
-        return buscarClientePorCpf(cpf) != null;
+    public boolean clienteExiste(String cpfCliente) {
+        return buscarClientePorCpf(cpfCliente) != null;
     }
 
     public Conta buscarContaPorNumero(String numeroConta) {
