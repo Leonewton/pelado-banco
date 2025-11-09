@@ -72,15 +72,19 @@ Estas são as instruções para compilação e execução do projeto via termina
 ### Passos
 
 ### 5.1.  **Clonar o repositório:**
-    ```bash
+ ```bash
     git clone https://github.com/Leonewton/pelado-banco/
     cd pelado-banco
-    ```
+ ```
 
 ### 5.2.  **Compilar o sistema:**
-DO TO
+```bash
+    javac model/*.java service/*.java view/*.java
+```
 ### 5.3.  **Executar o sistema:**
-DO TO
+```bash
+    java view.Main
+```
 ---
 
 ## 6. Diagrama de classes
